@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp2
 {
-    internal class SetupOptions
+    public class SetupOptions
     {
         public const string ConfigKey = "SETUP_OPTIONS";
 

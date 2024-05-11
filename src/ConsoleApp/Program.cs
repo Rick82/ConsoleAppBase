@@ -1,4 +1,6 @@
 ﻿using ConsoleApp2.Services;
+using ConsoleAppBase;
+using ConsoleAppBase.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,33 +43,8 @@ namespace ConsoleApp2
                     services.AddTransient<IMyService, MyService>();
                     services.AddOptions<SetupOptions>()
                         .Bind(hostBuilderContext.Configuration.GetSection(SetupOptions.ConfigKey));
-
+                    
                 });
-        }
-
-        public class Worker : IHostedService
-        {
-            private readonly IMyService _myService;
-            private readonly string _configKey;
-            private readonly ILogger<Worker> _logger;
-            public Worker(IMyService service, IConfiguration configuration, ILogger<Worker> logger, IOptions<SetupOptions> options)
-            {
-                _myService = service ?? throw new ArgumentNullException(nameof(service));
-                _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-                _configKey = configuration?["ConfigKey"] ??
-                             throw new ArgumentNullException(nameof(configuration));
-            }
-
-            public async Task StartAsync(CancellationToken cancellationToken)
-            {
-                _logger.LogInformation("Read {key} from settings", _configKey);
-                await _myService.PerformLongTaskAsync();
-            }
-
-            public Task StopAsync(CancellationToken cancellationToken)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }
